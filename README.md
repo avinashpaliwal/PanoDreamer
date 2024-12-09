@@ -6,7 +6,7 @@
 > [Andrii Tsarov](https://www.linkedin.com/in/andrii-tsarov-b8a9bb13), 
 > [Nima Khademi Kalantari](http://nkhademi.com/)
 
-[![Paper](https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red)]()
+[![Paper](https://img.shields.io/badge/cs.CV-Paper-b31b1b?logo=arxiv&logoColor=red)](https://arxiv.org/abs/2412.04827)
 [![Project Page](https://img.shields.io/badge/PanoDreamer-Website-blue?logo=googlechrome&logoColor=blue)](https://people.engr.tamu.edu/nimak/Papers/PanoDreamer/index.html)
 [![Video](https://img.shields.io/badge/YouTube-Video-c4302b?logo=youtube&logoColor=red)](https://youtu.be/EyVfFCg4aF8)
 
