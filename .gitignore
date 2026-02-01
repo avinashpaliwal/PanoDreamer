@@ -1,3 +1,42 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-assets/.DS_Store
+# Virtual environments
+.venv/
+venv/
+ENV/
+env/
+
+# Outputs
+output/
+out_*/
+*.png
+*.jpg
+*.jpeg
+!examples/*.png
+!examples/*.jpg
+!assets/*.png
+!assets/*.jpg
+!assets/*.gif
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
 .DS_Store
+Thumbs.db
+assets/.DS_Store
+
+# HuggingFace cache
+.cache/
+
+# Logs
+*.log

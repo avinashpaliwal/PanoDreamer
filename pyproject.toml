@@ -1,0 +1,18 @@
+[project]
+name = "panodreamer"
+version = "0.1.0"
+description = "MultiDiffusion panorama generation using Stable Diffusion 2.0 inpainting"
+requires-python = ">=3.9"
+dependencies = [
+    "numpy",
+    "transformers",
+    "diffusers",
+    "torch",
+    "torchvision",
+    "pillow",
+    "tqdm",
+    "accelerate",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["."]
