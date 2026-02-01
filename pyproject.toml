@@ -1,7 +1,7 @@
 [project]
 name = "panodreamer"
 version = "0.1.0"
-description = "MultiDiffusion panorama generation using Stable Diffusion 2.0 inpainting"
+description = "PanoDreamer: Optimization-Based Single Image to 360 3D Scene With Diffusion"
 requires-python = ">=3.9"
 dependencies = [
     "numpy",
@@ -12,6 +12,11 @@ dependencies = [
     "pillow",
     "tqdm",
     "accelerate",
+    "kornia",
+    "opencv-python",
+    "matplotlib",
+    "scikit-learn",
+    "ropwr",
 ]
 
 [tool.hatch.build.targets.wheel]

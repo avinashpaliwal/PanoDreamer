@@ -4,6 +4,7 @@ __pycache__/
 *$py.class
 *.so
 .Python
+*.egg-info/
 
 # Virtual environments
 .venv/
@@ -11,17 +12,28 @@ venv/
 ENV/
 env/
 
-# Outputs
+# Outputs and test directories
 output/
 out_*/
+test_*/
 *.png
 *.jpg
 *.jpeg
+*.npy
 !examples/*.png
 !examples/*.jpg
 !assets/*.png
 !assets/*.jpg
 !assets/*.gif
+
+# Model checkpoints
+checkpoints/
+
+# External dependencies (cloned repos)
+Depth-Anything-V2/
+
+# Backup files
+utils_backup/
 
 # IDE
 .vscode/
@@ -33,7 +45,6 @@ out_*/
 # OS
 .DS_Store
 Thumbs.db
-assets/.DS_Store
 
 # HuggingFace cache
 .cache/

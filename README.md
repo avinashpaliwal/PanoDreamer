@@ -19,26 +19,53 @@
 
 ## Overview
 
-This repository implements **MultiConDiffusion** for image-to-panorama generation - an iterative inpainting approach that extends a single input image into a full panorama.
+This repository implements panorama generation and depth estimation using diffusion models:
+
+- **`multicondiffusion.py`**: Extends an image horizontally in perspective space
+- **`multicondiffusion_panorama.py`**: Generates a 360° cylindrical panorama
+- **`depth_estimation.py`**: Estimates consistent depth maps for wide/panoramic images
 
 ### Implementation Status
 
-- [x] MultiConDiffusion panorama generation (perspective)
-- [x] Cylindrical panorama generation
-- [ ] Depth estimation
+- [x] MultiConDiffusion (wide image generation)
+- [x] Cylindrical panorama generation (360°)
+- [x] Depth estimation
 - [ ] 3D Gaussian Splatting (3DGS) scene creation
+
+## Example
+
+<p align="center">
+  <img src="assets/example_wide.png" alt="Wide image example" width="100%">
+  <br>
+  <em>Wide image generated with MultiConDiffusion</em>
+</p>
+
+<p align="center">
+  <img src="assets/example_wide_depth.png" alt="Depth estimation" width="100%">
+  <br>
+  <em>Depth estimation with view stitching</em>
+</p>
 
 ## Setup
 
 ```bash
+# Create environment
 uv venv
 source .venv/bin/activate
 uv pip install -e .
+
+# Clone Depth Anything V2 (for depth estimation)
+git clone https://github.com/DepthAnything/Depth-Anything-V2.git
+
+# Download depth model checkpoint
+mkdir -p checkpoints
+wget -P checkpoints https://huggingface.co/depth-anything/Depth-Anything-V2-Large/resolve/main/depth_anything_v2_vitl.pth
 ```
 
 ## Usage
 
-### MultiConDiffusion (Perspective Panorama)
+### 1. Wide Image Generation
+Extends the input image horizontally in perspective space.
 ```bash
 python multicondiffusion.py \
   --prompt_file examples/29_real_campus_3.txt \
@@ -46,15 +73,34 @@ python multicondiffusion.py \
   --output_dir output
 ```
 
-### Cylindrical Panorama
+### 2. Cylindrical Panorama (360°)
+Generates a full 360° cylindrical panorama from the input image.
 ```bash
-python multicondiffusion_perspective.py \
+python multicondiffusion_panorama.py \
   --prompt_file examples/29_real_campus_3.txt \
   --input_image examples/29_real_campus_3.png \
   --output_dir output
 ```
 
+### 3. Depth Estimation
+Estimates depth for wide images or cylindrical panoramas.
+```bash
+# For wide images (perspective)
+python depth_estimation.py \
+  --input_image output/final_output.png \
+  --output_dir output_depth \
+  --mode wide
+
+# For 360° panoramas (cylindrical)
+python depth_estimation.py \
+  --input_image output/final_output.png \
+  --output_dir output_depth \
+  --mode panorama
+```
+
 ### Arguments
+
+**Panorama generation** (`multicondiffusion.py`, `multicondiffusion_panorama.py`):
 - `--prompt_file`: Text file with scene description
 - `--input_image`: Input image (placed in center)
 - `--steps`: Denoising steps per iteration (default: 50)
@@ -63,6 +109,13 @@ python multicondiffusion_perspective.py \
 - `--guidance`: Guidance scale (default: 7.5)
 - `--seed`: Random seed (default: 0)
 - `--debug`: Save debug visualizations
+
+**Depth estimation** (`depth_estimation.py`):
+- `--input_image`: Input wide/panoramic image
+- `--output_dir`: Output directory
+- `--mode`: `wide` for perspective images, `panorama` for 360° cylindrical
+- `--iterations`: Number of alignment iterations (default: 15)
+- `--debug`: Save intermediate depth info
 
 ## Citation
 
