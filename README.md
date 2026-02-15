@@ -25,6 +25,7 @@ This repository implements panorama generation and 3D scene creation:
 - **`multicondiffusion_panorama.py`**: Generates a 360° cylindrical panorama
 - **`depth_estimation.py`**: Estimates consistent depth maps for wide/panoramic images
 - **`ldi_generation.py`**: Creates Layered Depth Images with background inpainting
+- **`train_gsplat.py`**: Optimizes 3DGS scene from panorama LDI
 - **`render_gsplat.py`**: Renders 3DGS scenes using gsplat (for visualization)
 
 ### Implementation Status
@@ -33,8 +34,8 @@ This repository implements panorama generation and 3D scene creation:
 - [x] Cylindrical panorama generation (360°)
 - [x] Depth estimation
 - [x] LDI generation (layered depth images)
+- [x] 3DGS scene optimization (training from LDI)
 - [x] 3DGS rendering (visualization with gsplat)
-- [ ] 3DGS scene optimization (training from LDI)
 
 ## Example
 
@@ -125,11 +126,21 @@ python ldi_generation.py \
   --num_layers 4
 ```
 
-### 5. 3DGS Rendering
-Renders 3D Gaussian Splatting scenes using gsplat (for pre-trained/optimized scenes).
+### 5. 3DGS Scene Optimization
+Optimizes a 3D Gaussian Splatting scene from panorama LDI layers.
+```bash
+python train_gsplat.py \
+  --ldi_dir output_ldi \
+  --output scene_optimized.ply \
+  --num_iterations 300 \
+  --num_views 16
+```
+
+### 6. 3DGS Rendering
+Renders 3D Gaussian Splatting scenes using gsplat (for visualization).
 ```bash
 python render_gsplat.py \
-  --ply scene.ply \
+  --ply scene_optimized.ply \
   --output renders \
   --num_frames 720 \
   --radius 2.0
@@ -160,6 +171,15 @@ python render_gsplat.py \
 - `--output_dir`: Output directory
 - `--num_layers`: Number of depth layers (default: 4)
 - `--debug`: Save layer visualizations
+
+**3DGS training** (`train_gsplat.py`):
+- `--ldi_dir`: Path to panorama LDI directory
+- `--output`: Output PLY file path (default: scene_optimized.ply)
+- `--num_iterations`: Number of optimization iterations (default: 300)
+- `--num_views`: Number of training views (default: 16)
+- `--lr`: Learning rate (default: 0.001)
+- `--focal`: Focal length (default: 582.69)
+- `--radius`: Camera orbit radius (default: 4.0)
 
 **3DGS rendering** (`render_gsplat.py`):
 - `--ply`: Path to 3DGS PLY file
