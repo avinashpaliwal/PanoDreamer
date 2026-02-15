@@ -1,0 +1,3 @@
+[submodule "3d-moments"]
+	path = 3d-moments
+	url = https://github.com/google-research/3d-moments.git

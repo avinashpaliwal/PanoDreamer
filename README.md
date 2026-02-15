@@ -19,18 +19,22 @@
 
 ## Overview
 
-This repository implements panorama generation and depth estimation using diffusion models:
+This repository implements panorama generation and 3D scene creation:
 
 - **`multicondiffusion.py`**: Extends an image horizontally in perspective space
 - **`multicondiffusion_panorama.py`**: Generates a 360° cylindrical panorama
 - **`depth_estimation.py`**: Estimates consistent depth maps for wide/panoramic images
+- **`ldi_generation.py`**: Creates Layered Depth Images with background inpainting
+- **`render_gsplat.py`**: Renders 3DGS scenes using gsplat (for visualization)
 
 ### Implementation Status
 
 - [x] MultiConDiffusion (wide image generation)
 - [x] Cylindrical panorama generation (360°)
 - [x] Depth estimation
-- [ ] 3D Gaussian Splatting (3DGS) scene creation
+- [x] LDI generation (layered depth images)
+- [x] 3DGS rendering (visualization with gsplat)
+- [ ] 3DGS scene optimization (training from LDI)
 
 ## Example
 
@@ -43,12 +47,19 @@ This repository implements panorama generation and depth estimation using diffus
 <p align="center">
   <img src="assets/example_wide_depth.png" alt="Depth estimation" width="100%">
   <br>
-  <em>Depth estimation with view stitching</em>
+  <em>Depth estimation with view stitching (bug needs to be fixed)</em>
 </p>
 
 ## Setup
 
 ```bash
+# Clone repository with submodules
+git clone --recursive https://github.com/yourusername/panodreamer.git
+cd panodreamer
+
+# Or if already cloned, initialize submodules
+git submodule update --init --recursive
+
 # Create environment
 uv venv
 source .venv/bin/activate
@@ -60,6 +71,12 @@ git clone https://github.com/DepthAnything/Depth-Anything-V2.git
 # Download depth model checkpoint
 mkdir -p checkpoints
 wget -P checkpoints https://huggingface.co/depth-anything/Depth-Anything-V2-Large/resolve/main/depth_anything_v2_vitl.pth
+
+# Download inpainting checkpoints for LDI generation
+# The original 3d-moments download.sh has broken links
+# Use our download script to get checkpoints from Google Drive
+pip install gdown
+python download_inpainting_ckpts.py
 ```
 
 ## Usage
@@ -98,6 +115,26 @@ python depth_estimation.py \
   --mode panorama
 ```
 
+### 4. LDI Generation
+Creates layered depth images by splitting depth into layers and inpainting occluded backgrounds.
+```bash
+python ldi_generation.py \
+  --input_image output/final_output.png \
+  --input_depth output_depth/depth.npy \
+  --output_dir output_ldi \
+  --num_layers 4
+```
+
+### 5. 3DGS Rendering
+Renders 3D Gaussian Splatting scenes using gsplat (for pre-trained/optimized scenes).
+```bash
+python render_gsplat.py \
+  --ply scene.ply \
+  --output renders \
+  --num_frames 720 \
+  --radius 2.0
+```
+
 ### Arguments
 
 **Panorama generation** (`multicondiffusion.py`, `multicondiffusion_panorama.py`):
@@ -116,6 +153,33 @@ python depth_estimation.py \
 - `--mode`: `wide` for perspective images, `panorama` for 360° cylindrical
 - `--iterations`: Number of alignment iterations (default: 15)
 - `--debug`: Save intermediate depth info
+
+**LDI generation** (`ldi_generation.py`):
+- `--input_image`: Input panorama image
+- `--input_depth`: Depth map (.npy file)
+- `--output_dir`: Output directory
+- `--num_layers`: Number of depth layers (default: 4)
+- `--debug`: Save layer visualizations
+
+**3DGS rendering** (`render_gsplat.py`):
+- `--ply`: Path to 3DGS PLY file
+- `--output`: Output directory
+- `--num_frames`: Number of frames (default: 120)
+- `--fps`: Video frame rate (default: 60)
+- `--radius`: Camera orbit radius (default: 4.0)
+- `--focal`: Focal length (default: 582.69)
+
+## Acknowledgements
+
+This codebase builds upon several excellent open-source projects:
+
+- **[MultiDiffusion](https://github.com/omerbt/MultiDiffusion)** - Fusing diffusion paths for controlled image generation
+- **[LucidDreamer](https://github.com/EnVision-Research/LucidDreamer)** - Domain-free generation of 3D Gaussian Splatting scenes
+- **[3d-moments](https://github.com/google-research/3d-moments)** - Inpainting networks for layered depth images
+- **[Depth-Anything-V2](https://github.com/DepthAnything/Depth-Anything-V2)** - Monocular depth estimation
+- **[gsplat](https://github.com/nerfstudio-project/gsplat)** - Python library for 3D Gaussian Splatting
+
+We thank the authors for making their code publicly available.
 
 ## Citation
 

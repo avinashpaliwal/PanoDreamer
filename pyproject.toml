@@ -17,6 +17,11 @@ dependencies = [
     "matplotlib",
     "scikit-learn",
     "ropwr",
+    "gsplat",
+    "gdown",
+    "imageio",
+    "imageio-ffmpeg",
+    "plyfile",
 ]
 
 [tool.hatch.build.targets.wheel]

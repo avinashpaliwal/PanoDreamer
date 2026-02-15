@@ -53,6 +53,6 @@ def get_depth_bins(depth=None, disparity=None, num_bins=None):
         depth_bins.append(1. / th)
 
     depth_bins = sorted(depth_bins)
-    depth_bins[0] = depth.min().numpy() - 1e-6
-    depth_bins[-1] = depth.max().numpy() + 1e-6
+    depth_bins[0] = depth.min().cpu().numpy() - 1e-6
+    depth_bins[-1] = depth.max().cpu().numpy() + 1e-6
     return depth_bins

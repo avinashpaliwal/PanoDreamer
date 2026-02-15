@@ -16,10 +16,14 @@ env/
 output/
 out_*/
 test_*/
+renders/
+renders_*/
 *.png
 *.jpg
 *.jpeg
 *.npy
+*.ply
+*.mp4
 !examples/*.png
 !examples/*.jpg
 !assets/*.png
@@ -31,9 +35,14 @@ checkpoints/
 
 # External dependencies (cloned repos)
 Depth-Anything-V2/
+inpainting_ckpts/
 
 # Backup files
 utils_backup/
+
+# Reference/temporary scripts
+luciddreamer*.py
+unused/
 
 # IDE
 .vscode/
